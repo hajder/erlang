@@ -1,24 +1,13 @@
 -module(dijkstra).
--export([read_graph/0, perform/4]).
+-export([perform/0, perform/4]).
 
 % S -  wierzchołki sprawdzone
 % Q - wierzchołki niesprawdzone
 % tupla - {V, C, P} - Vertex, Cost, Parent
-
-parse(0, List) ->
-  List;
-
-parse(N, List) when N > 0 ->
-  {_, Line} = io:fread("input from, to, weight: ", "~d ~d ~d"),
-  parse(N-1, List ++ [Line]).
-
-read_graph() ->
-  {_, [V]} = io:fread("vortex count: ", "~d"),
-  {_, [N]} = io:fread("path count: ", "~d"),
-  Paths = parse(N, []),
-  {_, [Start]} = io:fread("Start: ", "~d"),
-  {_, [Finish]} = io:fread("End: ", "~d"),
-  [V, Start, Finish, Paths].
+  
+perform() ->
+  [N, Start, End, Paths] = read_graph(),
+  perform(N, Start, End, Paths).
   
 perform(N, Start, End, Paths) ->
   S = [],
@@ -99,12 +88,6 @@ member(Vertex, [H|List]) ->
   end.
 
 % find vertex in list
-find(1, _) ->
-  {1,0,0};
-  
-find(_, []) ->
-  {0,0,0};
-
 find(Vertex, [H|List]) ->
   case H of
     {Vertex, _, _} -> H;
@@ -143,4 +126,18 @@ lowest_cost([H|Q], Result) ->
     true -> lowest_cost(Q, H);
     false-> lowest_cost(Q, Result)
   end.
+  
+parse(0, List) ->
+  List;
 
+parse(N, List) when N > 0 ->
+  {_, Line} = io:fread("input from, to, weight: ", "~d ~d ~d"),
+  parse(N-1, List ++ [Line]).
+
+read_graph() ->
+  {_, [V]} = io:fread("vortex count: ", "~d"),
+  {_, [N]} = io:fread("path count: ", "~d"),
+  Paths = parse(N, []),
+  {_, [Start]} = io:fread("Start: ", "~d"),
+  {_, [Finish]} = io:fread("End: ", "~d"),
+  [V, Start, Finish, Paths].
