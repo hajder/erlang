@@ -58,8 +58,7 @@ count_neighbours(Board, X, Y) ->
     A=<X+1 andalso 
     B>=Y-1 andalso 
     B=<Y+1 andalso 
-    A=/=X andalso 
-    B=/=Y andalso 
+    {A,B} =/= {X,Y} andalso
     V == live 
   end, dict:filter(fun(K,_) -> is_tuple(K) end, Board))).
   
